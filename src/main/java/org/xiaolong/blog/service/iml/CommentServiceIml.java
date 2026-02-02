@@ -22,6 +22,7 @@ public class CommentServiceIml implements CommentService
     {
         try
         {
+
             // 构造查询条件：按createTime倒序排序
             QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
             queryWrapper.orderByDesc("create_time"); // 注意字段名要和实体类一致（你的实体类中是creatTime）
@@ -38,6 +39,22 @@ public class CommentServiceIml implements CommentService
     {
         try
         {
+            if(comment.getName() == null || comment.getName().trim().isEmpty())
+            {
+                throw new BusinessException(400, "昵称不能为空");
+            }
+            if(comment.getName().length() > 40)
+            {
+                throw new BusinessException(400, "昵称不能超过40个字符");
+            }
+            if(comment.getContent() == null || comment.getContent().trim().isEmpty())
+            {
+                throw new BusinessException(400, "内容不能为空");
+            }
+            if(comment.getContent().length() > 400)
+            {
+                throw new BusinessException(400, "内容不能超过400个字符");
+            }
             int result = commentMapper.insert(comment);
             if (result <= 0)
             {

@@ -1,0 +1,24 @@
+package org.xiaolong.blog.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.xiaolong.blog.entity.User;
+import org.xiaolong.blog.service.UserService;
+
+@RestController
+@RequestMapping("/user")
+public class UserController
+{
+    @Autowired
+    private UserService userService;
+    //登录接口
+    @PostMapping("/login")
+    public String login(@RequestBody User user)
+    {
+        return userService.login(user.getUsername(), user.getPassword());
+    }
+
+}

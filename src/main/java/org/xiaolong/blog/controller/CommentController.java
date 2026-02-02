@@ -24,22 +24,7 @@ public class CommentController
     @Operation(summary = "上传评论接口", description = "需要上传昵称和评论内容")
     public Result<Long> uploadComment(@RequestBody Comment comment) throws BusinessException
     {
-        if(comment.getName() == null || comment.getName().trim().isEmpty())
-        {
-            throw new BusinessException(400, "昵称不能为空");
-        }
-        if(comment.getName().length() > 40)
-        {
-            throw new BusinessException(400, "昵称不能超过40个字符");
-        }
-        if(comment.getContent() == null || comment.getContent().trim().isEmpty())
-        {
-            throw new BusinessException(400, "内容不能为空");
-        }
-        if(comment.getContent().length() > 400)
-        {
-            throw new BusinessException(400, "内容不能超过400个字符");
-        }
+
         return Result.success(commentService.uploadComment(comment), "上传成功");
     }
 

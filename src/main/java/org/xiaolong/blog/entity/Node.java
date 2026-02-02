@@ -7,24 +7,23 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-@TableName("dragon_comment")
-public class Comment
+@TableName("dragon_node")
+public class Node
 {
     @TableId(type = IdType.AUTO)
-    @Schema(description = "评论id")
+    @Schema(description = "id")
     private Long id;
 
-    @Schema(description = "评论者名称")
-    private String name;
+    @Schema(description = "分类id")
+    private Long growthId;
 
-    @Schema(description = "评论内容")
+    @Schema(description = "内容")
     private String content;
 
-    @Schema(description = "评论时间")
+    @Schema(description = "图片url")
+    private String imgUrls;
+
+    @Schema(description = "创建时间")
     private String createTime;
-
-    @Schema(description = "联系方式")
-    private String contact;
-
 
 }
