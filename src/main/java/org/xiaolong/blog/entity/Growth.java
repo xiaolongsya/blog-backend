@@ -17,6 +17,12 @@ public class Growth
     @Schema(description = "类名")
     private String name;
 
+    @Schema(description = "节点数")
+    private Long nodeCount;
+
+    @Schema(description = "最近的节点id")
+    private Long lastNode;
+
     @Schema(description = "创建时间")
     private String createTime;
 }
