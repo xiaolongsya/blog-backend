@@ -14,52 +14,69 @@
         <spring-boot.version>2.6.13</spring-boot.version>
     </properties>
     <dependencies>
-        <!--文件操作工具-->
+        <!-- 修正：Spring Boot 2.x 对应 javax.servlet-api（解决拦截器导入问题） -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- 核心：Jsoup XSS 过滤依赖（接口防护必备） -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.17.2</version>
+        </dependency>
+
+        <!-- 文件操作工具 -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.15.1</version>
         </dependency>
+
+        <!-- Spring Boot Web 核心（拦截器、跨域、接口都依赖它） -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-        <!-- swagger依赖-->
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>2.9.2</version>
-        </dependency>
-        <!-- SpringDoc OpenAPI（支持 @Schema 注解 + 生成 Swagger UI 文档） -->
+
+        <!-- 修正：只保留 springdoc-openapi（适配 Spring Boot 2.6+，删除冲突的 springfox） -->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
-            <version>1.7.0</version> <!-- 版本与 Spring Boot 匹配，Spring Boot 3.x 用 2.x 版本 -->
+            <version>1.7.0</version>
         </dependency>
 
         <!-- MyBatis-Plus 依赖 -->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.5.5</version> <!-- 用最新稳定版 -->
+            <version>3.5.5</version>
         </dependency>
 
+        <!-- MySQL 驱动 -->
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
             <scope>runtime</scope>
         </dependency>
+
+        <!-- Lombok 简化代码 -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+
+        <!-- 测试依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -72,13 +89,11 @@
         </dependencies>
     </dependencyManagement>
 
-    <!-- 核心：Spring Boot 打包插件（必选！打成可执行 JAR） -->
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <!-- 绑定 Lombok（如果用了 Lombok，必须加这个配置） -->
                 <configuration>
                     <excludes>
                         <exclude>
@@ -87,7 +102,6 @@
                         </exclude>
                     </excludes>
                 </configuration>
-                <!-- 打包时构建可执行 JAR -->
                 <executions>
                     <execution>
                         <goals>
@@ -97,18 +111,16 @@
                 </executions>
             </plugin>
 
-            <!-- 可选：Maven 编译插件（指定 JDK 版本，避免编译报错） -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.11.0</version>
                 <configuration>
-                    <source>8</source> <!-- 你的 JDK 版本，比如 8/11/17 -->
+                    <source>8</source>
                     <target>8</target>
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-
 </project>

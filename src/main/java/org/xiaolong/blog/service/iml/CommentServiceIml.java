@@ -7,7 +7,12 @@ import org.xiaolong.blog.common.BusinessException;
 import org.xiaolong.blog.entity.Comment;
 import org.xiaolong.blog.mapper.CommentMapper;
 import org.xiaolong.blog.service.CommentService;
+import org.xiaolong.blog.utils.IpUtils;
+import org.xiaolong.blog.utils.TimeUtils;
 
+import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -15,6 +20,9 @@ public class CommentServiceIml implements CommentService
 {
     @Autowired
     private CommentMapper commentMapper;
+
+    // 每小时最大提交次数限制
+    private static final int MAX_COMMENT_PER_HOUR = 5;
 
     // 查询所有评论
     @Override
@@ -33,37 +41,54 @@ public class CommentServiceIml implements CommentService
         }
     }
 
-    //上传评论
     @Override
-    public Long uploadComment(Comment comment) throws BusinessException
-    {
-        try
-        {
-            if(comment.getName() == null || comment.getName().trim().isEmpty())
-            {
+    public Long uploadComment(Comment comment, HttpServletRequest request) throws BusinessException {
+        try {
+            // 1. 参数合法性校验（原有逻辑）
+            if (comment.getName() == null || comment.getName().trim().isEmpty()) {
                 throw new BusinessException(400, "昵称不能为空");
             }
-            if(comment.getName().length() > 40)
-            {
+            if (comment.getName().length() > 40) {
                 throw new BusinessException(400, "昵称不能超过40个字符");
             }
-            if(comment.getContent() == null || comment.getContent().trim().isEmpty())
-            {
+            if (comment.getContent() == null || comment.getContent().trim().isEmpty()) {
                 throw new BusinessException(400, "内容不能为空");
             }
-            if(comment.getContent().length() > 400)
-            {
+            if (comment.getContent().length() > 400) {
                 throw new BusinessException(400, "内容不能超过400个字符");
             }
+
+            // 2. IP与时间赋值（适配LocalDateTime）
+            String realIp = IpUtils.getRealIp(request);
+            comment.setIp(realIp);
+            // 改为LocalDateTime类型，与实体类字段匹配
+            comment.setCreateTime(LocalDateTime.now());
+
+            // 3. 计算当前小时段（LocalDateTime类型）
+            LocalDateTime hourStartTime = TimeUtils.getCurrentHourStartTime();
+            LocalDateTime hourEndTime = TimeUtils.getCurrentHourEndTime();
+
+            // 4. 统计IP当前小时提交次数（参数改为LocalDateTime）
+            Integer commentCount = commentMapper.countCommentByIpAndTimeRange(realIp, hourStartTime, hourEndTime);
+            commentCount = commentCount == null ? 0 : commentCount;
+
+            // 5. 超限判断
+            int MAX_COMMENT_PER_HOUR = 5;
+            if (commentCount >= MAX_COMMENT_PER_HOUR) {
+                throw new BusinessException(403, "当前IP每小时评论次数已达上限（5次），请1小时后再试");
+            }
+
+            // 6. 插入评论
             int result = commentMapper.insert(comment);
-            if (result <= 0)
-            {
+            if (result <= 0) {
                 throw new BusinessException(400, "上传失败");
             }
+
             return comment.getId();
-        } catch (BusinessException e)
-        {
-            throw new BusinessException(500, "服务器内部错误");
+        } catch (BusinessException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new BusinessException(500, "服务器内部错误：" + e.getMessage());
         }
     }
 }

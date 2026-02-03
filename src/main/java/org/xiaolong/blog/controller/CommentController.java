@@ -9,6 +9,7 @@ import org.xiaolong.blog.common.Result;
 import org.xiaolong.blog.entity.Comment;
 import org.xiaolong.blog.service.CommentService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -19,15 +20,14 @@ public class CommentController
     @Autowired
     private CommentService commentService;
 
-    //上传评论接口
+    // 上传评论接口
     @PostMapping("/upload")
-    @Operation(summary = "上传评论接口", description = "需要上传昵称和评论内容")
-    public Result<Long> uploadComment(@RequestBody Comment comment) throws BusinessException
-    {
-
-        return Result.success(commentService.uploadComment(comment), "上传成功");
+    @Operation(summary = "上传评论接口", description = "需要上传昵称和评论内容，每IP每小时限5次")
+    public Result<Long> uploadComment(@RequestBody Comment comment, HttpServletRequest request) throws BusinessException {
+        // 调用服务层方法，传入comment和request（用于获取真实IP）
+        Long commentId = commentService.uploadComment(comment, request);
+        return Result.success(commentId, "上传成功");
     }
-
     //查询评论接口
     @GetMapping("/list")
     @Operation(summary = "查询评论接口(按时间倒序)")

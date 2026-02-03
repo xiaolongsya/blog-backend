@@ -4,21 +4,21 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/**
+ * 跨域配置类，仅允许指定域名调用评论接口
+ */
 @Configuration
-public class CorsConfig implements WebMvcConfigurer
-{
+public class CorsConfig implements WebMvcConfigurer {
+
+    /**
+     * 配置跨域规则（最小权限原则，仅开放必要域名和方法）
+     */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                // 允许所有外部前端地址访问，适配其他用户访问你的主页场景
-                .allowedOriginPatterns("*")
-                // 允许所有HTTP请求方法（GET/POST等，保证接口请求正常）
-                .allowedMethods("*")
-                // 允许请求头携带自定义字段（后续扩展如Token也能兼容）
-                .allowedHeaders("*")
-                // 允许携带凭证（可选，不影响当前图文展示需求）
+        registry.addMapping("/**") // 全局匹配所有接口
+                .allowedOrigins("http://localhost:8083", "http://124.221.211.146", "https://xiaolongya.cn","http://localhost:5173" )
+                .allowedMethods("GET", "POST", "PUT", "DELETE") // 开放常用请求方法
                 .allowCredentials(true)
-                // 预检请求缓存1小时，优化访问速度
                 .maxAge(3600);
     }
 }
