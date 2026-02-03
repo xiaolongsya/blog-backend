@@ -3,8 +3,8 @@ package org.xiaolong.blog.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.xiaolong.blog.common.Result;
 import org.xiaolong.blog.entity.Node;
 import org.xiaolong.blog.service.NodeService;
 
@@ -18,10 +18,18 @@ public class NodeController
     private NodeService nodeService;
 
     //根据分类id查询节点
-    @RequestMapping("/list")
+    @GetMapping("/list")
     @Operation(summary = "根据分类id查询节点")
-    public List<Node> listNodeByGrowthId(@Parameter(description = "分类id") Long growthId)
+    public Result<List<Node>> listNodeByGrowthId(@Parameter(description = "分类id") Long growthId)
     {
-        return nodeService.listNodesByGrowthId(growthId);
+        return Result.success(nodeService.listNodesByGrowthId(growthId));
+    }
+
+    //上传节点
+    @PostMapping("/upload")
+    @Operation(summary = "上传节点")
+    public Result<String> uploadNode(@RequestBody Node node)
+    {
+        return Result.success(nodeService.uploadNode(node));
     }
 }

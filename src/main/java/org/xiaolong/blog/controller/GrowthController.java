@@ -2,8 +2,8 @@ package org.xiaolong.blog.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.xiaolong.blog.common.Result;
 import org.xiaolong.blog.entity.Growth;
 import org.xiaolong.blog.service.GrowthService;
 
@@ -17,10 +17,18 @@ public class GrowthController
     private GrowthService growthService;
 
     // 获取所有分类
-    @RequestMapping("/list")
+    @GetMapping("/list")
     @Operation(summary = "获取所有分类")
-    public List<Growth> listGrowth()
+    public Result<List<Growth>> listGrowth()
     {
-        return growthService.listGrowth();
+        return Result.success(growthService.listGrowth());
+    }
+
+    //上传分类
+    @PostMapping("/upload")
+    @Operation(summary = "上传分类")
+    public Result<String> uploadGrowth(@RequestBody Growth growth)
+    {
+        return Result.success(growthService.uploadGrowth(growth));
     }
 }

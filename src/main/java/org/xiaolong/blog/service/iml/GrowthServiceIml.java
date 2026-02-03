@@ -26,4 +26,44 @@ public class GrowthServiceIml implements GrowthService
             throw new BusinessException(500, "查询分类列表失败" + e.getMessage());
         }
     }
+
+    //上传分类
+    @Override
+    public String uploadGrowth(Growth growth) throws BusinessException
+    {
+        try
+        {
+            growthMapper.insert(growth);
+            return "上传成功";
+        } catch (Exception e)
+        {
+            throw new BusinessException(500, "上传分类失败" + e.getMessage());
+        }
+    }
+
+    //根据id查询分类
+    @Override
+    public Growth getGrowthById(Long id) throws BusinessException
+    {
+        try
+        {
+            return growthMapper.selectById(id);
+        } catch (Exception e)
+        {
+            throw new BusinessException(500, "查询分类失败" + e.getMessage());
+        }
+    }
+
+    //修改分类
+    @Override
+    public Integer updateGrowth(Growth growth) throws BusinessException
+    {
+        try
+        {
+            return growthMapper.updateById(growth);
+        } catch (Exception e)
+        {
+            throw new BusinessException(500, "修改分类失败" + e.getMessage());
+        }
+    }
 }

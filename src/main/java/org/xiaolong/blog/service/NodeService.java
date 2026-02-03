@@ -8,5 +8,8 @@ import java.util.List;
 public interface NodeService
 {
 
+    //获取分类的节点列表
     List<Node> listNodesByGrowthId(Long growthId) throws BusinessException;
+    //上传节点
+    String uploadNode(Node node) throws BusinessException;
 }
