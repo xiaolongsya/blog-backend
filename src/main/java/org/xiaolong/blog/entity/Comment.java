@@ -34,5 +34,8 @@ public class Comment
     @Schema(description = "评论者ip")
     private String ip;
 
+    @Schema(description = "回复")
+    private String reply;
+
 
 }

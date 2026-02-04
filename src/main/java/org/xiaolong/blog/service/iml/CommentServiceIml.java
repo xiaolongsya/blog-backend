@@ -12,6 +12,7 @@ import org.xiaolong.blog.utils.TimeUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 
@@ -44,7 +45,7 @@ public class CommentServiceIml implements CommentService
     @Override
     public Long uploadComment(Comment comment, HttpServletRequest request) throws BusinessException {
         try {
-            // 1. 参数合法性校验（原有逻辑）
+            // 1. 参数合法性校验（原有逻辑，不变）
             if (comment.getName() == null || comment.getName().trim().isEmpty()) {
                 throw new BusinessException(400, "昵称不能为空");
             }
@@ -60,15 +61,21 @@ public class CommentServiceIml implements CommentService
 
             // 2. IP与时间赋值（适配LocalDateTime）
             String realIp = IpUtils.getRealIp(request);
+            // 新增：校验IP是否获取成功，避免null导致查询失效
+            if (realIp == null || realIp.trim().isEmpty()) {
+                throw new BusinessException(400, "无法获取您的IP地址，无法提交评论");
+            }
             comment.setIp(realIp);
-            // 改为LocalDateTime类型，与实体类字段匹配
-            comment.setCreateTime(LocalDateTime.now());
 
-            // 3. 计算当前小时段（LocalDateTime类型）
-            LocalDateTime hourStartTime = TimeUtils.getCurrentHourStartTime();
-            LocalDateTime hourEndTime = TimeUtils.getCurrentHourEndTime();
+            // 新增：给Comment的创建时间赋值（指定中国时区，和统计时间时区一致）
+            comment.setCreateTime(LocalDateTime.now(TimeUtils.CHINA_ZONE).truncatedTo(ChronoUnit.MILLIS));
 
-            // 4. 统计IP当前小时提交次数（参数改为LocalDateTime）
+            // 3. 获取当前小时时间范围（修复后：统一时间，无临界值漏洞）
+            LocalDateTime[] hourTimeRange = TimeUtils.getCurrentHourTimeRange();
+            LocalDateTime hourStartTime = hourTimeRange[0];
+            LocalDateTime hourEndTime = hourTimeRange[1];
+
+            // 4. 统计IP当前小时提交次数（参数改为LocalDateTime，确保Mapper注解正确）
             Integer commentCount = commentMapper.countCommentByIpAndTimeRange(realIp, hourStartTime, hourEndTime);
             commentCount = commentCount == null ? 0 : commentCount;
 
