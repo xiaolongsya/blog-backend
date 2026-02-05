@@ -4,8 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xiaolong.blog.common.BusinessException;
 import org.xiaolong.blog.entity.Growth;
+import org.xiaolong.blog.entity.Node;
 import org.xiaolong.blog.mapper.GrowthMapper;
+import org.xiaolong.blog.mapper.NodeMapper;
 import org.xiaolong.blog.service.GrowthService;
+import org.xiaolong.blog.service.NodeService;
 
 import java.util.List;
 
@@ -14,6 +17,8 @@ public class GrowthServiceIml implements GrowthService
 {
     @Autowired
     private GrowthMapper growthMapper;
+    @Autowired
+    private NodeMapper nodeMapper;
     //获取分类列表
     @Override
     public List<Growth> listGrowth() throws BusinessException
@@ -64,6 +69,29 @@ public class GrowthServiceIml implements GrowthService
         } catch (Exception e)
         {
             throw new BusinessException(500, "修改分类失败" + e.getMessage());
+        }
+    }
+
+    //删除分类
+    @Override
+    public String deleteGrowth(Long id) throws BusinessException
+    {
+        try
+        {
+            int result = growthMapper.deleteById(id);
+            if(result <= 0)
+            {
+                throw BusinessException.operateFail("删除分类失败");
+            }
+            List<Node> nodes = nodeMapper.listNodesByGrowthId(id);
+            for (Node node : nodes)
+            {
+                nodeMapper.deleteById(node.getId());
+            }
+            return "修改成功";
+        } catch (Exception e)
+        {
+            throw new BusinessException(500, "删除分类失败" + e.getMessage());
         }
     }
 

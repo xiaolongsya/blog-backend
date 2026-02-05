@@ -53,4 +53,26 @@ public class NodeServiceIml implements NodeService
             throw new BusinessException(500, "上传节点失败" + e.getMessage());
         }
     }
+
+    //删除节点
+    @Override
+    public String deleteNode(Long id) throws BusinessException
+    {
+        try
+        {
+            Node node = nodeMapper.selectById(id);
+            Growth growth = growthService.getGrowthById(node.getGrowthId());
+            growth.setNodeCount(growth.getNodeCount() - 1);
+            Integer result = growthService.updateGrowth(growth);
+            if(result <= 0)
+            {
+                throw new BusinessException(500, "更新分类失败");
+            }
+            nodeMapper.deleteById(id);
+            return "删除成功";
+        } catch (Exception e)
+        {
+            throw new BusinessException(500, "删除节点失败" + e.getMessage());
+        }
+    }
 }

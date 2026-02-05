@@ -15,4 +15,6 @@ public interface GrowthService
     Growth getGrowthById(Long id) throws BusinessException;
     //修改分类
     Integer updateGrowth(Growth growth) throws BusinessException;
+
+    String deleteGrowth(Long id) throws BusinessException;
 }

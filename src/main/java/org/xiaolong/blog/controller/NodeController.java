@@ -32,4 +32,12 @@ public class NodeController
     {
         return Result.success(nodeService.uploadNode(node));
     }
+
+    //删除节点
+    @PostMapping("/delete")
+    @Operation(summary = "删除节点")
+    public Result<String> deleteNode(@RequestParam Long id)
+    {
+        return Result.success(nodeService.deleteNode(id));
+    }
 }

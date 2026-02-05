@@ -12,4 +12,6 @@ public interface NodeService
     List<Node> listNodesByGrowthId(Long growthId) throws BusinessException;
     //上传节点
     String uploadNode(Node node) throws BusinessException;
+
+    String deleteNode(Long id) throws BusinessException;
 }

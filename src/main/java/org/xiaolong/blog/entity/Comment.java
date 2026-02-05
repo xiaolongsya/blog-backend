@@ -28,9 +28,6 @@ public class Comment
     @Schema(description = "联系方式")
     private String contact;
 
-    @Schema(description = "临时，中奖情况")
-    private String status;
-
     @Schema(description = "评论者ip")
     private String ip;
 

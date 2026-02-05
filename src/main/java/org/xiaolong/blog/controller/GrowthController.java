@@ -31,4 +31,12 @@ public class GrowthController
     {
         return Result.success(growthService.uploadGrowth(growth));
     }
+
+    //删除分类
+    @PostMapping("/delete")
+    @Operation(summary = "删除分类")
+    public Result<String> deleteGrowth(@RequestParam Long id)
+    {
+        return Result.success(growthService.deleteGrowth(id));
+    }
 }
