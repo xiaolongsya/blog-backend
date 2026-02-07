@@ -11,4 +11,6 @@ public interface DevelopmentService
     Long upload(Development development) throws BusinessException;
     //按时间倒序查询所有更新记录
     List<Development> list() throws BusinessException;
+    //分页查询
+    List<Development> listPage(int pageNum, int pageSize) throws BusinessException;
 }

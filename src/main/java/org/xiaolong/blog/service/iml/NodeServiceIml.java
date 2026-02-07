@@ -1,5 +1,7 @@
 package org.xiaolong.blog.service.iml;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xiaolong.blog.common.BusinessException;
@@ -73,6 +75,21 @@ public class NodeServiceIml implements NodeService
         } catch (Exception e)
         {
             throw new BusinessException(500, "删除节点失败" + e.getMessage());
+        }
+    }
+
+    //分页查询节点
+    @Override
+    public List<Node> listNodePage(int pageNum, int pageSize, Long growth_id) throws BusinessException
+    {
+        try
+        {
+            Page<Node> pageParam = new Page<>(pageNum, pageSize);
+            IPage<Node> result = nodeMapper.listNodesByGrowthId(pageParam, growth_id);
+            return result.getRecords();
+        } catch (Exception e)
+        {
+            throw new BusinessException(500, "分页查询节点列表失败" + e.getMessage());
         }
     }
 }

@@ -40,4 +40,13 @@ public class NodeController
     {
         return Result.success(nodeService.deleteNode(id));
     }
+
+
+    //分页查询节点
+    @GetMapping("/listPage")
+    @Operation(summary = "分页查询节点", description = "传入页码和大小")
+    public Result<List<Node>> listNodePage(@RequestParam int pageNum, @RequestParam int pageSize, @RequestParam Long growthId)
+    {
+        return Result.success(nodeService.listNodePage(pageNum, pageSize, growthId));
+    }
 }

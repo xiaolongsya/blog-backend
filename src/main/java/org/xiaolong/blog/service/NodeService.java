@@ -14,4 +14,6 @@ public interface NodeService
     String uploadNode(Node node) throws BusinessException;
 
     String deleteNode(Long id) throws BusinessException;
+
+    List<Node> listNodePage(int pageNum, int pageSize, Long growthId) throws BusinessException;
 }

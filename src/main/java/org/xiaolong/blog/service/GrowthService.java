@@ -17,4 +17,6 @@ public interface GrowthService
     Integer updateGrowth(Growth growth) throws BusinessException;
 
     String deleteGrowth(Long id) throws BusinessException;
+
+    List<Growth> listGrowthPage(int pageNum, int pageSize) throws BusinessException;
 }

@@ -1,5 +1,7 @@
 package org.xiaolong.blog.service.iml;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xiaolong.blog.common.BusinessException;
@@ -92,6 +94,21 @@ public class GrowthServiceIml implements GrowthService
         } catch (Exception e)
         {
             throw new BusinessException(500, "删除分类失败" + e.getMessage());
+        }
+    }
+
+    //分页查询成长分类
+    @Override
+    public List<Growth> listGrowthPage(int pageNum, int pageSize)
+    {
+        try
+        {
+            Page<Growth> pageParam = new Page<>(pageNum, pageSize);
+            IPage<Growth> result = growthMapper.selectPageList(pageParam);
+            return result.getRecords();
+        } catch(Exception e)
+        {
+            throw new BusinessException(500, "分页查询列表失败" + e.getMessage());
         }
     }
 

@@ -39,4 +39,12 @@ public class GrowthController
     {
         return Result.success(growthService.deleteGrowth(id));
     }
+
+    //分页查询成长分类
+    @GetMapping("/listPage")
+    @Operation(summary = "分页查询成长分类", description = "传入页码和大小")
+    public Result<List<Growth>> listPage(@RequestParam int pageNum, @RequestParam int pageSize)
+    {
+        return Result.success(growthService.listGrowthPage(pageNum, pageSize));
+    }
 }

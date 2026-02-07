@@ -1,6 +1,8 @@
 package org.xiaolong.blog.service.iml;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xiaolong.blog.common.BusinessException;
@@ -52,6 +54,28 @@ public class DevelopmentServiceIml implements DevelopmentService
         {
             throw new BusinessException(500, "查询列表失败" + e.getMessage());
         }
+    }
+
+    //分页查询更新记录
+    @Override
+    public List<Development> listPage(int pageNum, int pageSize) throws BusinessException
+    {
+
+        try
+        {
+            // 1. 构造分页条件 (MyBatis-Plus 的对象)
+            Page<Development> pageParam = new Page<>(pageNum, pageSize);
+            // 2. 调用 Mapper
+            // 这一步执行后，pageParam 对象里就被填充了数据
+            IPage<Development> result = developmentMapper.selectPageList(pageParam);
+            // 3. ⭐ 关键点：只提取 List 数据返回
+            // result.getTotal(); // 这里其实还有总条数，但你的接口返回 List，意味着丢弃了总条数信息
+            return result.getRecords();
+        } catch (Exception e)
+        {
+            throw new BusinessException(500, "分页查询列表失败" + e.getMessage());
+        }
+
     }
 
 
