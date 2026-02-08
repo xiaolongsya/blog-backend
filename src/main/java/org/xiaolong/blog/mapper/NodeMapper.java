@@ -18,5 +18,5 @@ public interface NodeMapper extends BaseMapper<Node>
 
     //根据分类id分页查询节点
     @Select("select * from dragon_node where growth_id = #{growth_id}")
-    IPage<Node> listNodesByGrowthId(@Param("page") IPage<Node> page, @Param("growth_id") Long growthId);
+    IPage<Node> listNodesByPage(@Param("page") IPage<Node> page, @Param("growth_id") Long growthId);
 }

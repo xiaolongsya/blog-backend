@@ -85,7 +85,7 @@ public class NodeServiceIml implements NodeService
         try
         {
             Page<Node> pageParam = new Page<>(pageNum, pageSize);
-            IPage<Node> result = nodeMapper.listNodesByGrowthId(pageParam, growth_id);
+            IPage<Node> result = nodeMapper.listNodesByPage(pageParam, growth_id);
             return result.getRecords();
         } catch (Exception e)
         {
