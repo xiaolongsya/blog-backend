@@ -36,4 +36,13 @@ public class CommentController
         List<Comment> comments = commentService.listCommentsByTimeDesc();
         return Result.success(comments, "查询成功");
     }
+
+    //分页获取评论
+    @GetMapping("/listPage")
+    @Operation(summary = "分页获取评论接口")
+    public Result<List<Comment>> listComments(@RequestParam Integer pageNum, @RequestParam Integer pageSize) throws BusinessException
+    {
+        List<Comment> comments = commentService.listComments(pageNum, pageSize);
+        return Result.success(comments, "查询成功");
+    }
 }

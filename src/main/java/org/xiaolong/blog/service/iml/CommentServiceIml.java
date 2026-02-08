@@ -1,6 +1,8 @@
 package org.xiaolong.blog.service.iml;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xiaolong.blog.common.BusinessException;
@@ -96,6 +98,21 @@ public class CommentServiceIml implements CommentService
             throw e;
         } catch (Exception e) {
             throw new BusinessException(500, "服务器内部错误：" + e.getMessage());
+        }
+    }
+
+    //分页查询评论
+    @Override
+    public     List<Comment> listComments(Integer pageNum, Integer pageSize) throws BusinessException
+    {
+        try
+        {
+            Page<Comment> pageParam = new Page<>(pageNum, pageSize);
+            IPage<Comment> result = commentMapper.selectPage(pageParam);
+            return result.getRecords();
+        } catch (Exception e)
+        {
+            throw new BusinessException(500, "分页查询列表失败" + e.getMessage());
         }
     }
 }

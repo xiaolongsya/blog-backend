@@ -13,4 +13,5 @@ public interface CommentService
     //上传评论
     Long uploadComment(Comment comment, HttpServletRequest request) throws BusinessException;
 
+    List<Comment> listComments(Integer pageNum, Integer pageSize) throws BusinessException;
 }
