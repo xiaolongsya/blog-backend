@@ -1,6 +1,7 @@
 package org.xiaolong.blog.service;
 
 import org.xiaolong.blog.common.BusinessException;
+import org.xiaolong.blog.dto.CommentListDTO;
 import org.xiaolong.blog.entity.Comment;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,5 +14,6 @@ public interface CommentService
     //上传评论
     Long uploadComment(Comment comment, HttpServletRequest request) throws BusinessException;
 
-    List<Comment> listComments(Integer pageNum, Integer pageSize) throws BusinessException;
+    //分页查询
+    CommentListDTO listComments(Integer pageNum, Integer pageSize) throws BusinessException;
 }

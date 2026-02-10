@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xiaolong.blog.common.BusinessException;
+import org.xiaolong.blog.dto.CommentListDTO;
 import org.xiaolong.blog.entity.Comment;
 import org.xiaolong.blog.mapper.CommentMapper;
 import org.xiaolong.blog.service.CommentService;
@@ -103,13 +104,13 @@ public class CommentServiceIml implements CommentService
 
     //分页查询评论
     @Override
-    public     List<Comment> listComments(Integer pageNum, Integer pageSize) throws BusinessException
+    public CommentListDTO listComments(Integer pageNum, Integer pageSize) throws BusinessException
     {
         try
         {
             Page<Comment> pageParam = new Page<>(pageNum, pageSize);
             IPage<Comment> result = commentMapper.selectPage(pageParam);
-            return result.getRecords();
+            return new CommentListDTO(result.getTotal(), result.getRecords());
         } catch (Exception e)
         {
             throw new BusinessException(500, "分页查询列表失败" + e.getMessage());

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.xiaolong.blog.common.BusinessException;
 import org.xiaolong.blog.common.Result;
+import org.xiaolong.blog.dto.CommentListDTO;
 import org.xiaolong.blog.entity.Comment;
 import org.xiaolong.blog.service.CommentService;
 
@@ -40,9 +41,9 @@ public class CommentController
     //分页获取评论
     @GetMapping("/listPage")
     @Operation(summary = "分页获取评论接口")
-    public Result<List<Comment>> listComments(@RequestParam Integer pageNum, @RequestParam Integer pageSize) throws BusinessException
+    public Result<CommentListDTO> listComments(@RequestParam Integer pageNum, @RequestParam Integer pageSize) throws BusinessException
     {
-        List<Comment> comments = commentService.listComments(pageNum, pageSize);
+        CommentListDTO comments = commentService.listComments(pageNum, pageSize);
         return Result.success(comments, "查询成功");
     }
 }
