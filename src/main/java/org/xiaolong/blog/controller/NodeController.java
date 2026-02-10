@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.xiaolong.blog.common.Result;
+import org.xiaolong.blog.dto.GrowthSearchDTO;
 import org.xiaolong.blog.entity.Node;
 import org.xiaolong.blog.service.NodeService;
 
@@ -48,5 +49,13 @@ public class NodeController
     public Result<List<Node>> listNodePage(@RequestParam int pageNum, @RequestParam int pageSize, @RequestParam Long growthId)
     {
         return Result.success(nodeService.listNodePage(pageNum, pageSize, growthId));
+    }
+
+    //传入关键字查询节点
+    @GetMapping("/listByKeyword")
+    @Operation(summary = "传入关键字查询节点")
+    public Result<List<GrowthSearchDTO>> listNodeByKeyword(@RequestParam String keyword)
+    {
+        return Result.success(nodeService.listNodeByKeyword(keyword));
     }
 }

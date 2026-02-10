@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xiaolong.blog.common.BusinessException;
+import org.xiaolong.blog.dto.GrowthSearchDTO;
 import org.xiaolong.blog.entity.Growth;
 import org.xiaolong.blog.entity.Node;
 import org.xiaolong.blog.mapper.NodeMapper;
@@ -92,4 +93,18 @@ public class NodeServiceIml implements NodeService
             throw new BusinessException(500, "分页查询节点列表失败" + e.getMessage());
         }
     }
+
+    //搜索功能，传入关键字，返回匹配的节点
+    @Override
+    public List<GrowthSearchDTO> listNodeByKeyword(String keyword) throws BusinessException
+    {
+        try
+        {
+            return nodeMapper.searchByKeyword(keyword);
+        } catch (Exception e)
+        {
+            throw new BusinessException(500, "搜索失败" + e.getMessage());
+        }
+    }
+
 }

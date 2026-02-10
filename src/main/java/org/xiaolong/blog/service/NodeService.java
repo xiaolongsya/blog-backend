@@ -1,6 +1,7 @@
 package org.xiaolong.blog.service;
 
 import org.xiaolong.blog.common.BusinessException;
+import org.xiaolong.blog.dto.GrowthSearchDTO;
 import org.xiaolong.blog.entity.Node;
 
 import java.util.List;
@@ -16,4 +17,6 @@ public interface NodeService
     String deleteNode(Long id) throws BusinessException;
 
     List<Node> listNodePage(int pageNum, int pageSize, Long growthId) throws BusinessException;
+
+    List<GrowthSearchDTO> listNodeByKeyword(String keyword) throws BusinessException;
 }
