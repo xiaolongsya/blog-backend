@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.xiaolong.blog.entity.Comment;
+import org.xiaolong.blog.entity.Reply;
 
 import java.util.List;
 
@@ -18,4 +19,6 @@ public class CommentListDTO
     private Long total;
     @Schema(description = "评论列表")
     private List<Comment> list;
+    @Schema(description = "回复列表")
+    private List<Reply> replyList;
 }

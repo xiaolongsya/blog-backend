@@ -30,7 +30,8 @@ public class WebConfig implements WebMvcConfigurer {
                         "/growth/upload",
                         "/development/upload",
                         "/node/upload",
-                        "/growth/update"
+                        "/growth/update",
+                        "/upload/image"
                 )
                 .excludePathPatterns("/error")
                 .order(1); // 可选：将 order 改为 1（因为删除了 IP 拦截器，顺序更合理，不改也不影响功能）

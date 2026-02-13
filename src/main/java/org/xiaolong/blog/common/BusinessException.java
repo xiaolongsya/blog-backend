@@ -3,12 +3,15 @@ package org.xiaolong.blog.common;
 
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * 自定义业务异常类：专门处理业务逻辑相关的错误（如评论为空、昵称超长、今日评论超限等）
  */
-@Data
+@Setter
+@Getter
 @NoArgsConstructor
 public class BusinessException extends RuntimeException
 {

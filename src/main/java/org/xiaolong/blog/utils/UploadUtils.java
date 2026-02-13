@@ -22,6 +22,7 @@ public class UploadUtils {
     @Value("${upload.access-prefix}")
     private String accessPrefix;
 
+    //上传图片
     public String uploadImage(MultipartFile file) throws IOException {
         // 2. 打印配置的 basePath（确认是否读取到正确的服务器路径）
         log.info("配置的文件存储根路径：{}", basePath);
@@ -74,4 +75,5 @@ public class UploadUtils {
         log.info("构建的访问 URL：{}", accessUrl);
         return accessUrl;
     }
+
 }

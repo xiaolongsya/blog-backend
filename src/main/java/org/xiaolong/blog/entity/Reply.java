@@ -9,29 +9,23 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-@TableName("dragon_comment")
-public class Comment
+@TableName("dragon_comment_reply")
+public class Reply
 {
     @TableId(type = IdType.AUTO)
-    @Schema(description = "评论id")
+    @Schema(description = "回复id")
     private Long id;
 
-    @Schema(description = "评论者名称")
+    @Schema(description = "评论id")
+    private Long commentId;
+
+    @Schema(description = "名字")
     private String name;
 
-    @Schema(description = "评论内容")
+    @Schema(description = "内容")
     private String content;
 
-    @Schema(description = "评论时间")
+    @Schema(description = "回复时间")
     private LocalDateTime createTime;
-
-    @Schema(description = "联系方式")
-    private String contact;
-
-    @Schema(description = "评论者ip")
-    private String ip;
-
-
-
 
 }

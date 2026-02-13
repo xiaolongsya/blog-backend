@@ -9,6 +9,7 @@ import org.xiaolong.blog.common.BusinessException;
 import org.xiaolong.blog.dto.CommentListDTO;
 import org.xiaolong.blog.entity.Comment;
 import org.xiaolong.blog.mapper.CommentMapper;
+import org.xiaolong.blog.mapper.ReplyMapper;
 import org.xiaolong.blog.service.CommentService;
 import org.xiaolong.blog.utils.IpUtils;
 import org.xiaolong.blog.utils.TimeUtils;
@@ -24,9 +25,9 @@ public class CommentServiceIml implements CommentService
 {
     @Autowired
     private CommentMapper commentMapper;
+    @Autowired
+    private ReplyMapper replyMapper;
 
-    // 每小时最大提交次数限制
-    private static final int MAX_COMMENT_PER_HOUR = 5;
 
     // 查询所有评论
     @Override
@@ -110,7 +111,7 @@ public class CommentServiceIml implements CommentService
         {
             Page<Comment> pageParam = new Page<>(pageNum, pageSize);
             IPage<Comment> result = commentMapper.selectPage(pageParam);
-            return new CommentListDTO(result.getTotal(), result.getRecords());
+            return new CommentListDTO(result.getTotal(), result.getRecords(), replyMapper.selectList(null));
         } catch (Exception e)
         {
             throw new BusinessException(500, "分页查询列表失败" + e.getMessage());
