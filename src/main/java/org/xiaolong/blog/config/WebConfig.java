@@ -26,14 +26,7 @@ public class WebConfig implements WebMvcConfigurer {
 
         // 2. 限流拦截器（完整保留，核心需求不变，正常生效）
         registry.addInterceptor(new RateLimitInterceptor())
-                .addPathPatterns(
-                        "/growth/upload",
-                        "/development/upload",
-                        "/node/upload",
-                        "/growth/update",
-                        "/upload/image"
-                )
-                .excludePathPatterns("/error")
-                .order(1); // 可选：将 order 改为 1（因为删除了 IP 拦截器，顺序更合理，不改也不影响功能）
+                // 只拦截你需要限流的业务接口，避开静态资源
+                .addPathPatterns("/**");
     }
 }

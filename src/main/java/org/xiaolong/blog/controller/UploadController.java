@@ -1,11 +1,12 @@
 package org.xiaolong.blog.controller;
 
-import com.sun.tools.javac.util.List;
+
 import io.swagger.v3.oas.annotations.Operation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,7 +37,7 @@ public class UploadController
     private Integer maxSize;
 
     // 上传图片接口,返回url
-    @RequestMapping("/image")
+    @PostMapping("/image")
     @Operation(summary = "上传图片接口", description = "上传图片接口，返回url")
     public Result<String> uploadImage(@RequestParam("file") MultipartFile file) {
         try {

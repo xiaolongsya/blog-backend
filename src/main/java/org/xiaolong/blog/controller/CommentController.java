@@ -8,6 +8,7 @@ import org.xiaolong.blog.common.BusinessException;
 import org.xiaolong.blog.common.Result;
 import org.xiaolong.blog.dto.CommentListDTO;
 import org.xiaolong.blog.entity.Comment;
+import org.xiaolong.blog.interceptor.RateLimit;
 import org.xiaolong.blog.service.CommentService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,6 +40,7 @@ public class CommentController
     }
 
     //分页获取评论
+    @RateLimit(count = 30, time = 60000)
     @GetMapping("/listPage")
     @Operation(summary = "分页获取评论接口")
     public Result<CommentListDTO> listComments(@RequestParam Integer pageNum, @RequestParam Integer pageSize) throws BusinessException

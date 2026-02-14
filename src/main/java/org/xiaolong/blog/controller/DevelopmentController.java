@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import org.xiaolong.blog.common.Result;
 import org.xiaolong.blog.dto.DevelopmentListDTO;
 import org.xiaolong.blog.entity.Development;
+import org.xiaolong.blog.interceptor.RateLimit;
 import org.xiaolong.blog.service.DevelopmentService;
 
 import java.util.List;
@@ -34,6 +35,7 @@ public class DevelopmentController
     }
 
     //分页查询更新记录
+    @RateLimit(count = 30, time = 60000)
     @GetMapping("/listPage")
     @Operation(summary = "分页查询更新记录", description = "传入页码和大小")
     public Result<DevelopmentListDTO> listPage(@RequestParam int pageNum, @RequestParam int pageSize)

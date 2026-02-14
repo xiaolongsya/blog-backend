@@ -49,7 +49,7 @@ public class CommentServiceIml implements CommentService
     @Override
     public Long uploadComment(Comment comment, HttpServletRequest request) throws BusinessException {
         try {
-            // 1. 参数合法性校验（原有逻辑，不变）
+            // 1. 参数合法性校验（保留，非常必要）
             if (comment.getName() == null || comment.getName().trim().isEmpty()) {
                 throw new BusinessException(400, "昵称不能为空");
             }
@@ -63,33 +63,20 @@ public class CommentServiceIml implements CommentService
                 throw new BusinessException(400, "内容不能超过400个字符");
             }
 
-            // 2. IP与时间赋值（适配LocalDateTime）
+            // 2. IP与时间赋值（保留，因为存入数据库需要记录这些信息）
             String realIp = IpUtils.getRealIp(request);
-            // 新增：校验IP是否获取成功，避免null导致查询失效
             if (realIp == null || realIp.trim().isEmpty()) {
                 throw new BusinessException(400, "无法获取您的IP地址，无法提交评论");
             }
             comment.setIp(realIp);
-
-            // 新增：给Comment的创建时间赋值（指定中国时区，和统计时间时区一致）
             comment.setCreateTime(LocalDateTime.now(TimeUtils.CHINA_ZONE).truncatedTo(ChronoUnit.MILLIS));
 
-            // 3. 获取当前小时时间范围（修复后：统一时间，无临界值漏洞）
-            LocalDateTime[] hourTimeRange = TimeUtils.getCurrentHourTimeRange();
-            LocalDateTime hourStartTime = hourTimeRange[0];
-            LocalDateTime hourEndTime = hourTimeRange[1];
+            // =====================================================================
+            // 核心改动：删除了原来的第 3、4、5 步（基于数据库的时间范围查询和超限判断）
+            // 因为如果代码能走到这里，说明拦截器已经放行了，绝对没有超限！
+            // =====================================================================
 
-            // 4. 统计IP当前小时提交次数（参数改为LocalDateTime，确保Mapper注解正确）
-            Integer commentCount = commentMapper.countCommentByIpAndTimeRange(realIp, hourStartTime, hourEndTime);
-            commentCount = commentCount == null ? 0 : commentCount;
-
-            // 5. 超限判断
-            int MAX_COMMENT_PER_HOUR = 5;
-            if (commentCount >= MAX_COMMENT_PER_HOUR) {
-                throw new BusinessException(403, "当前IP每小时评论次数已达上限（5次），请1小时后再试");
-            }
-
-            // 6. 插入评论
+            // 3. 插入评论
             int result = commentMapper.insert(comment);
             if (result <= 0) {
                 throw new BusinessException(400, "上传失败");

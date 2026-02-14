@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.xiaolong.blog.common.Result;
 import org.xiaolong.blog.dto.GrowthSearchDTO;
 import org.xiaolong.blog.entity.Node;
+import org.xiaolong.blog.interceptor.RateLimit;
 import org.xiaolong.blog.service.NodeService;
 
 import java.util.List;
@@ -44,6 +45,7 @@ public class NodeController
 
 
     //分页查询节点
+    @RateLimit(count = 30, time = 60000)
     @GetMapping("/listPage")
     @Operation(summary = "分页查询节点", description = "传入页码和大小")
     public Result<List<Node>> listNodePage(@RequestParam int pageNum, @RequestParam int pageSize, @RequestParam Long growthId)

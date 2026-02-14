@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.xiaolong.blog.common.Result;
 import org.xiaolong.blog.entity.Growth;
+import org.xiaolong.blog.interceptor.RateLimit;
 import org.xiaolong.blog.service.GrowthService;
 
 import java.util.List;
@@ -41,6 +42,7 @@ public class GrowthController
     }
 
     //分页查询成长分类
+    @RateLimit(count = 30, time = 60000)
     @GetMapping("/listPage")
     @Operation(summary = "分页查询成长分类", description = "传入页码和大小")
     public Result<List<Growth>> listPage(@RequestParam int pageNum, @RequestParam int pageSize)
