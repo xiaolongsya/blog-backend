@@ -16,6 +16,20 @@
         <spring-boot.version>2.6.13</spring-boot.version>
     </properties>
     <dependencies>
+        <!-- 图片压缩核心依赖 -->
+        <dependency>
+            <groupId>net.coobird</groupId>
+            <artifactId>thumbnailator</artifactId>
+            <version>0.4.20</version>
+        </dependency>
+
+        <!-- 替换原来的 webp-imageio -->
+        <dependency>
+            <groupId>com.twelvemonkeys.imageio</groupId>
+            <artifactId>imageio-webp</artifactId>
+            <version>3.10.1</version>
+        </dependency>
+
         <!-- 修正：Spring Boot 2.x 对应 javax.servlet-api（解决拦截器导入问题） -->
         <dependency>
             <groupId>javax.servlet</groupId>

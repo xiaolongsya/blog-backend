@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xiaolong.blog.common.BusinessException;
 import org.xiaolong.blog.entity.Stack;
+import org.xiaolong.blog.interceptor.RateLimit;
 import org.xiaolong.blog.mapper.StackMapper;
 import org.xiaolong.blog.service.StackService;
 
@@ -33,6 +34,7 @@ public class StackServiceIml implements StackService
     }
 
     //获取所有技术栈
+
     public List<Stack> listStacks() throws BusinessException
     {
         try

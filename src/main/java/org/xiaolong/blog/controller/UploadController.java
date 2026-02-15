@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.xiaolong.blog.common.Result;
 import org.xiaolong.blog.entity.Img; // 导入 Img 实体
+import org.xiaolong.blog.interceptor.RateLimit;
 import org.xiaolong.blog.mapper.ImgMapper;
 import org.xiaolong.blog.utils.UploadUtils;
 
@@ -37,6 +38,7 @@ public class UploadController
     private Integer maxSize;
 
     // 上传图片接口,返回url
+    @RateLimit(count = 30, time = 60000)
     @PostMapping("/image")
     @Operation(summary = "上传图片接口", description = "上传图片接口，返回url")
     public Result<String> uploadImage(@RequestParam("file") MultipartFile file) {
